@@ -1,6 +1,7 @@
 from .data import PromptInputs, TextPrompt, TokensPrompt, prompt_inputs
 from .evs import compute_retained_tokens_count, compute_retention_mask
 from .multimodal import MultimodalInput
+from .video_input_processor import VideoInputProcessor
 from .registry import (BaseMultimodalDummyInputsBuilder,
                        BaseMultimodalInputProcessor, ExtraProcessedInputs,
                        InputProcessor, MultimodalPlaceholderMetadata,
@@ -59,4 +60,5 @@ __all__ = [
     "compute_retained_tokens_count",
     "compute_retention_mask",
     "load_base64_image_embeds",
+    "VideoInputProcessor"
 ]
