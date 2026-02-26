@@ -636,6 +636,27 @@ def create_input_processor(
             logger.info("Unregistered model, using DefaultInputProcessor")
             input_processor_cls = None
         if input_processor_cls is not None:
+            model_type_name = getattr(config, "model_type", "")
+            architectures = getattr(config, "architectures", None)
+            arch0 = architectures[0] if architectures and len(architectures) > 0 else ""
+            arch0 = arch0 or ""
+            model_type_name = (model_type_name or "").lower()
+            arch0_lower = str(arch0).lower() if arch0 else ""
+            is_internvl = ("internvl" in model_type_name) or ("internvl" in arch0_lower) or ("internvl_chat" in model_type_name) or ("internvlchat" in arch0_lower)
+            if is_internvl:
+                from .video_input_processor import VideoInputProcessor
+                vision_cfg = getattr(config, "vision_config", None)
+                    image_size = getattr(vision_cfg, "image_size", None) or getattr(config, "image_size", None) or 448
+                    max_tiles = getattr(config, "max_dynamic_patch", None) or getattr(config, "max_num_tiles", None) or 12
+
+                    vp = VideoInputProcessor(
+                        model_path_or_id=model_path_or_dir,
+                        tokenizer=tokenizer,
+                        image_size=int(image_size),
+                        max_num_tiles=int(max_tiles),
+                        local_files_only=False,
+                    )
+                    return vp
             return input_processor_cls(model_path_or_dir,
                                        config,
                                        tokenizer,
