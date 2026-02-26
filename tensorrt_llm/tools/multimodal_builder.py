@@ -1240,7 +1240,10 @@ def build_internvl_engine(args):
     if 'InternVL2-26B' in args.model_path:
         image_processor = AutoProcessor.from_pretrained(
             'OpenGVLab/InternViT-6B-448px-V1-5')
+    elif 'InternViT-300M-448px-V2_5' in args.model_path or 'V2_5' in args.model_path:
+        image_processor = AutoProcessor.from_pretrained('OpenGVLab/InternViT-300M-448px-V2_5')
     else:
+        #FallBack
         image_processor = CLIPImageProcessor.from_pretrained(
             'OpenGVLab/InternViT-300M-448px')
     image = image_processor(images=raw_image, return_tensors='pt').pixel_values
